@@ -3,3 +3,5 @@ git remote add origin ruta/repositorio
 git add . : esos agrega todo a repositorio
 git commit -m ok: eso hace un comit con mensaje
 git push -u origin master. eso lo publica
+
+isaac_admin / isaac12345
