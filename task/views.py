@@ -5,17 +5,19 @@ from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
 from task import forms, models
 from django.utils import timezone
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
 
+@login_required
 def delete_task(request,id):
     task = get_object_or_404(models.Task, pk=id, user=request.user)
     if request.method == 'POST':
         task.delete()
         return redirect('tasks')
 
-
+@login_required
 def complete_task(request,id):
     task = get_object_or_404(models.Task, pk=id, user=request.user)
     if request.method == 'POST':
@@ -23,6 +25,7 @@ def complete_task(request,id):
         task.save()
         return redirect('tasks')
 
+@login_required
 def task_detail(request, id):
     if request.method == 'GET':
         task = get_object_or_404(models.Task,pk=id, user=request.user)
@@ -45,7 +48,7 @@ def task_detail(request, id):
             })
 
     
-
+@login_required
 def create_tasks(request):
 
     if request.method == 'GET':
@@ -68,6 +71,7 @@ def create_tasks(request):
 def home(request):
     return render(request, 'home.html')
 
+@login_required
 def tasks(request):
     tasks = models.Task.objects.filter(
         user=request.user,
@@ -75,7 +79,7 @@ def tasks(request):
     return render(request, 'tasks.html',{
         'tasks': tasks
     })
-
+@login_required
 def tasks_completed(request):
     tasks = models.Task.objects.filter(
         user=request.user,
@@ -84,9 +88,11 @@ def tasks_completed(request):
         'tasks': tasks
     })
 
+@login_required
 def signout(request):
     logout(request)
     return redirect('home')
+
 
 def signin(request):
 

@@ -1,38 +1,24 @@
-
 {% extends 'base.html' %}
-
 {% block content %}
-
-    <h1>Tasks</h1>
-
-    {% for i in tasks %}
-
-        <ul><li>
-
-            <h3>Nombre de la tarea: {{i.title}}</h3>
-            <p>Descripción: {{i.description}}</p>
-            <p>Creada por: {{i.user.username}}</p>
-
-            {% if i.important %}
-                <p>Importancia: alta</p>
-            {% else %}
-                <p>Importancia: baja</p>
-            {% endif %}
-
-            {% if i.datecompleted %}
-                <p>Fecha: {{i.datecompleted}}</p>
-            {% else %}
-                <p>Estatus: pendiente</p>
-            {% endif %}
-
-            <a href="{% url 'tasks_detail' i.id %}">
-                <button>editar tarea</button>
-            </a>
-
-        </li></ul>
-
-    {% endfor %}
-
-    
-
+    <main class="container">
+        <div class="row">
+            <div class="col-md-4 offset-md-4">
+                <ul class="list-group">
+                    <h1 class="text-center display-3 py-3">Tasks Pending</h1>
+                    {% for i in tasks %}
+                        <a class="list-group-item" href="{% url 'tasks_detail' i.id %}">
+                            <header class="justify-content-between">
+                                <h1 class="fw-bold text-success">Tasks</h1>
+                                <h3>Name: {{i.title}}</h3>
+                                <p>Description: {{i.description}}</p>
+                                <p>Created by: {{i.user.username}}</p>
+                                {% if i.important %} <p>Importance: HIGH</p> {% else %} <p>Importance: LOW</p> {% endif %}
+                                {% if i.datecompleted %} <p>Date: {{i.datecompleted|date:'M j Y:i' }}</p> {% else %} <p>Status: PENDING</p> {% endif %}
+                            </header>
+                        </a>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </main>
 {% endblock %}

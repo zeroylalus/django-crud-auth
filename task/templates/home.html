@@ -3,6 +3,23 @@
 
 {% block content %}
 
-    <h1>Home</h1>
+    <main class="container py-5">
+
+        <section class="card - card-body">
+
+            <h1 class="display-1 text-center py-3">Django app</h1>
+
+            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolore, ipsum facere nesciunt amet tempora adipisci sed veritatis, quidem facilis nemo laudantium, excepturi modi at iste ea nisi aspernatur obcaecati est itaque voluptatibus provident beatae commodi quo! Fugit veritatis modi repudiandae odio id officiis excepturi iusto illo accusamus, optio ducimus mollitia veniam officia hic. Ex nobis enim accusamus qui expedita. Voluptate, tempora? Et at saepe necessitatibus veniam a minima molestiae, fugiat animi aut tempora in debitis maiores itaque iusto molestias quaerat ullam nobis ut expedita obcaecati nulla, consectetur rem corrupti! Facere, consequuntur! Harum vel, corporis corrupti quod eveniet error voluptatem id.</p>
+
+            <div class="text-center">
+
+                <a class="btn btn-secondary" href="{% url 'signin' %}">signin</a>
+                <a class="btn btn-dark" href="{% url 'signup' %}">signup</a>
+
+            </div>
+
+        </section>
+
+    </main>
 
 {% endblock %}
