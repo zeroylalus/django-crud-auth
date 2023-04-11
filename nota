@@ -1,7 +1,91 @@
+""" 
+
 git init: Initialized empty Git repository in ruta/escritorio
+creo que es cuando viene de una USB: git config --global --add safe.directory 'E:/ejercicios programación/ejercicio 1'
 git remote add origin ruta/repositorio
 git add . : esos agrega todo a repositorio
 git commit -m ok: eso hace un comit con mensaje
-git push -u origin master. eso lo publica
+git push -u origin master: eso lo publica
 
 isaac_admin / isaac12345
+
+* SE INSTALLA UNA EXTENCION APARTE:
+    pip install django-crispy-forms
+    pip install crispy-bootstrap4
+
+* NUEVO CONTEXTO PARA AGREGAR DICCIONARIOS EN UNA VARIABLE:
+    context = {'form': forms.UniuversityForm }
+        return render(request,'index.html',context)
+
+* REITERACION DE ".as_p" COMO HERRAMIENTA UTIL
+
+* TUPLAS DE OPCIONES: 
+    tupla que contiene tuplas anidadas, cada anidada representa una opción con un valor y una etiqueta correspondiente:
+
+    OPCIÓN N: VALOR: 1 / ETIQUETA: 'Web Development'
+
+    subject = forms.ChoiceField(choices=SUBJECT_CHOICES)
+
+    SUBJECT_CHOICES = (
+            (1, 'Web Development'),
+            (2, 'System Programming'),
+            (3, 'Data Science')
+        )
+
+* 'crispy_bootstrap4', 'crispy_forms',: 
+    SE DEBE AGREGAR A LA LISTA DE APPS EN settings.py, DEBE SER UN TIPO DE APP O FUNCIONA COMO UNA APP DENTRO DE DJANGO
+
+* CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
+  CRISPY_TEMPLATE_PACK = 'bootstrap4': 
+    has template packs for different libraries css frameworks 'we use bootstrap 4' template pack, this goes into settings.py
+
+* {.% load crispy_forms_tags %}: 
+    use crispy forms within our template 
+
+* {.{ form.as_p }} >>> {.% crispy form %}: 
+    render the form to use the crispy form tag
+
+* agrega una fecha como en appsheet y puedes poner el maximo en fecha de agregado:
+
+    necesita importar esto: from datetime import datetime
+
+    date_of_birth = forms.DateField(
+        widget=forms.DateInput(attrs={
+            'type':'date',
+            'max': datetime.now().date()
+        }
+    ))
+
+* agrega las opciones y los pone como opción multiple:
+
+    subject = forms.ChoiceField(
+        choices=SUBJECT_CHOICES, 
+        widget=forms.RadioSelect()
+    )
+
+* SET FORM ACTION: in 'form action' use 'reverse lazy function' to url template tag
+    . reference the index url
+    . not submit the form in the view
+    . inspect elements: we got a 'form element'
+    . specify where the submission should be sent on server
+    . looks up urls by name, turns them into proper path for url on server
+    . gives a way of specifying that
+
+    from django.urls import reverse_lazy
+    from crispy_forms.helper import FormHelper
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+
+    >>> self.helper.form_action = reverse_lazy('index')
+    >>> AGREGA UNA ACCION: <form action="/"></form>
+
+* AGREGAR UN BOTON SUBMIT AL CUESTIONARIO
+
+    from crispy_forms.helper import FormHelper
+    from crispy_forms.layout import Submit
+
+    self.helper.add_input(Submit('submit','submit')) 
+    
+    """

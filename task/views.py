@@ -3,15 +3,40 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
+from task import forms, models
 
 
 # Create your views here.
 
+def create_tasks(request):
+
+    if request.method == 'GET':
+        return render(request, 'create_tasks.html',{
+            'form': forms.TaskForm
+        })
+    else:
+        try:
+            f = forms.TaskForm(request.POST)
+            t = f.save(commit=False)
+            t.user = request.user
+            t.save()
+            return render(request, 'tasks.html',{
+                'tarea_creada': 'Tarea creada satisfactoriamente'
+            })
+        except ValueError:
+            return render(request, 'create_tasks.html',{
+                'form': forms.TaskForm,
+                'error': 'Please provide valid data'
+            })
+        
 def home(request):
     return render(request, 'home.html')
 
 def tasks(request):
-    return render(request, 'tasks.html')
+    tasks = models.Task.objects.all()
+    return render(request, 'tasks.html',{
+        'tasks': tasks
+    })
 
 def signout(request):
     logout(request)
