@@ -1,12 +1,14 @@
 
 <ul>
 
+    <li><a href="/admin/">Admin</a></li>
+
     <li><a href="{% url 'home' %}">Home</a></li>
 
-    <li><a href="{% url 'tasks' %}">Tasks</a></li>
-    <li><a href="{% url 'create_tasks' %}">Create Tasks</a></li>
-
     {% if user.is_authenticated %}
+    <li><a href="{% url 'tasks' %}">Tasks</a></li>
+    <li><a href="{% url 'tasks_completed' %}">Completed Tasks</a></li>
+    <li><a href="{% url 'create_tasks' %}">Create Tasks</a></li>
     <li><a href="{% url 'logout' %}">Logout</a></li>
     {% else %}
     <li><a href="{% url 'signin' %}">Signin</a></li>

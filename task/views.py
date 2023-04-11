@@ -1,12 +1,50 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
 from task import forms, models
+from django.utils import timezone
 
 
 # Create your views here.
+
+def delete_task(request,id):
+    task = get_object_or_404(models.Task, pk=id, user=request.user)
+    if request.method == 'POST':
+        task.delete()
+        return redirect('tasks')
+
+
+def complete_task(request,id):
+    task = get_object_or_404(models.Task, pk=id, user=request.user)
+    if request.method == 'POST':
+        task.datecompleted = timezone.now()
+        task.save()
+        return redirect('tasks')
+
+def task_detail(request, id):
+    if request.method == 'GET':
+        task = get_object_or_404(models.Task,pk=id, user=request.user)
+        form = forms.TaskForm(instance=task)
+        return render(request, 'task_detail.html', {
+            'task': task,
+            'form': form
+        })
+    else:
+        try:
+            task = get_object_or_404(models.Task,pk=id, user=request.user)
+            form = forms.TaskForm(request.POST,instance=task)
+            form.save()
+            return redirect('tasks')
+        except ValueError:
+            return render(request, 'task_detail.html', {
+                'task': task,
+                'form': form,
+                'error': 'Error updating task'
+            })
+
+    
 
 def create_tasks(request):
 
@@ -20,9 +58,7 @@ def create_tasks(request):
             t = f.save(commit=False)
             t.user = request.user
             t.save()
-            return render(request, 'tasks.html',{
-                'tarea_creada': 'Tarea creada satisfactoriamente'
-            })
+            return redirect('tasks')
         except ValueError:
             return render(request, 'create_tasks.html',{
                 'form': forms.TaskForm,
@@ -33,7 +69,17 @@ def home(request):
     return render(request, 'home.html')
 
 def tasks(request):
-    tasks = models.Task.objects.all()
+    tasks = models.Task.objects.filter(
+        user=request.user,
+        datecompleted__isnull=True)
+    return render(request, 'tasks.html',{
+        'tasks': tasks
+    })
+
+def tasks_completed(request):
+    tasks = models.Task.objects.filter(
+        user=request.user,
+        datecompleted__isnull=False).order_by('-datecompleted')
     return render(request, 'tasks.html',{
         'tasks': tasks
     })
@@ -60,10 +106,7 @@ def signin(request):
             })
         else:
             login(request, user)
-            return render(request, 'tasks.html', {
-                'form':AuthenticationForm,
-                'signin':'Ya estas loggeado',
-            })
+            return redirect('tasks')
     
 
 def signup(request):
@@ -80,9 +123,7 @@ def signup(request):
                 password=request.POST['password1'])
                 user.save()
                 login(request, user)
-                return render(request, 'tasks.html', {
-                    'signup' : 'User created successfully'
-                })
+                return redirect('tasks')
             except IntegrityError:
                 return render(request, 'signup.html', {
                     'form' : UserCreationForm,

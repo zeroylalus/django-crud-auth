@@ -3,15 +3,33 @@
 
 {% block content %}
 
-    <h2>{{signin}}</h2>
-    <h2>{{signup}}</h2>
-    <h2> {{tarea_creada}} </h2>
-
     <h1>Tasks</h1>
 
     {% for i in tasks %}
 
-        <div>{{i}}</div>
+        <ul><li>
+
+            <h3>Nombre de la tarea: {{i.title}}</h3>
+            <p>Descripción: {{i.description}}</p>
+            <p>Creada por: {{i.user.username}}</p>
+
+            {% if i.important %}
+                <p>Importancia: alta</p>
+            {% else %}
+                <p>Importancia: baja</p>
+            {% endif %}
+
+            {% if i.datecompleted %}
+                <p>Fecha: {{i.datecompleted}}</p>
+            {% else %}
+                <p>Estatus: pendiente</p>
+            {% endif %}
+
+            <a href="{% url 'tasks_detail' i.id %}">
+                <button>editar tarea</button>
+            </a>
+
+        </li></ul>
 
     {% endfor %}
 
